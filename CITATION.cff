@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "Please cite the version used for verification."
+title: "Sharp good-slope gaps for permutations of squarefree residue rings"
+authors:
+  - family-names: "Kyzlasov"
+    given-names: "Oleg"
+version: "1.0"
+date-released: 2026-11-25
+type: software
+license: CC-BY-4.0
+repository-code: "https://github.com/olegtuta/good-slope-gaps"

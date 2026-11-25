@@ -1,0 +1,108 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,booktabs}
+\usepackage[a4paper,top=21mm,bottom=22mm,left=26mm,right=26mm]{geometry}
+\usepackage{color}
+\definecolor{refblue}{rgb}{.12,.23,.40}
+\usepackage[colorlinks=true,allcolors=refblue]{hyperref}
+\hypersetup{pdfauthor={Oleg Kyzlasov},pdftitle={Sharp good-slope gaps for permutations of squarefree residue rings}}
+\urlstyle{same}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\U}{U}
+\setlength{\emergencystretch}{1em}
+\raggedbottom
+\title{\bfseries Sharp good-slope gaps for permutations\\of squarefree residue rings}
+\author{Oleg Kyzlasov}
+\date{25 November 2026 \quad $\cdot$ \quad Version 1.0}
+\begin{document}
+\maketitle
+\begin{abstract}
+A slope $m$ is good for a permutation $f$ of $\Z/n\Z$ if $x\mapsto f(x)+mx$ is a permutation. Let $n=apq$ for primes $a<p<q$, with $a=3$ or $5$. We prove that the largest good-slope count strictly below $\varphi(n)$ is $(a-1)(p-1)(q-2)$. We also determine this count for $1365=3\cdot5\cdot7\cdot13$: it is $528$, whereas the maximum is $576$. These are cases of Bhunia's gap question. The proof compares collision multiplicities in different prime coordinates. At $1365$ it reduces the last possible exception to the compatibility of four plane point sets sharing two specified points. Finite certificates and an offline checker accompany the proof.
+\end{abstract}
+\section{The gap below the maximum}
+For $n>1$ put $R_n=\Z/n\Z$ and write $\varphi$ for Euler's totient function. For any map $h:R_n\to R_n$ define
+\[
+ D_n(h)=\{u\in R_n:x\mapsto h(x)+ux\text{ is bijective}\}.
+\]
+Bhunia proved that $|D_n(f)|\le\varphi(n)$ for every permutation $f$. The identity attains equality \cite[Theorem~3.1]{first}. Write $H(n)$ for the largest of the counts strictly below this maximum whenever such a count exists. For odd $n$ with at least two distinct prime divisors, Bhunia asks whether $H(n)=\varphi(n)(q-2)/(q-1)$, where $q$ is the largest prime divisor \cite[Question~10.2]{second}.
+
+\begin{theorem}\label{thm:family}
+Let $a<p<q$ be primes, where $a\in\{3,5\}$. Then
+\[
+ H(apq)=(a-1)(p-1)(q-2).
+\]
+\end{theorem}
+\begin{theorem}\label{thm:four}
+$H(1365)=528$. No permutation modulo $1365$ has between $529$ and $575$ good slopes, inclusive.
+\end{theorem}
+
+Bhunia gives the attaining construction in \cite[Proposition~9.6]{second}, and proves the upper bound for products of two odd primes, for congruence-preserving permutations, and for several families with repeated prime factors. The values $H(105)=40$ and $H(165)=72$ already follow from the upper bounds in \cite{aft105,aft165}. For $3pq$ the latter source also gives the upper bound when $q\ge 2p-1$ and $2q>3(p+1)$, using prime-field hypotheses implied by the direction theorem. Theorem~\ref{thm:family} removes these restrictions and also treats least prime factor $5$. For example, $H(231)=108$, with $p=7$ and $q=11$ outside the separation range. The general question includes moduli with more prime factors and moduli divisible by prime squares.
+
+For completeness, put $n=kq$ with $q\nmid k$ in either theorem. Bhunia's permutation equals $2x$ on the multiples of $k$ and $x$ elsewhere. In $R_k\times\F_q$ it fixes the first coordinate and multiplies the second by $2$ over $0$ and by $1$ elsewhere. After adding $ux$, the first coordinate has multiplier $1+u$ and must be onto. When it is onto, the second coordinate must be bijective on each fiber. Hence
+\begin{equation}\label{eq:witness}
+ |D_n(f)|=\varphi(k)(q-2),
+\end{equation}
+since $1+u$ must be a unit modulo $k$ and $u$ must avoid $-1,-2$ modulo $q$. It remains to exclude higher nonextremal counts.
+
+\section{Collisions in a coordinate row}
+By \cite[Theorem~3.1(i)]{first}, there is a unit $c$ such that $D_n(f)+c$ is contained in the units. Put $g(x)=f(x)-cx$. Then $D_n(g)=D_n(f)+c$. All subsequent counts concern $g$, which need not be bijective. For squarefree $n$, the Chinese remainder theorem identifies the units with the array $\prod_{r\mid n}\U_r$, where the product runs over primes and $\U_r=\F_r^\times$. A cell outside $D_n(g)$ in this array will be called bad. A row of axis $r$ fixes every coordinate except the one at $r$. It is dense if more than $(r-1)/2$ of its cells are good, and sparse otherwise. Write
+\[
+ M(u)=\max_{z\in R_n}|\{x:g(x)+ux=z\}|.
+\]
+
+Fix an $r$-row having a good cell. For each fixed output in the other coordinates there are exactly $r$ inputs, since the good cell gives a bijection. The $r$ pairs $(x_r,g(x)_r)$ belonging to these inputs are distinct, for equal pairs would collide even at the good cell. Call such a set of pairs a fiber of the row. A tested coefficient $t\in\U_r$ acts on every fiber by $(x,y)\mapsto y+tx$. Its largest line occupancy over these fibers equals $M(u)$ at the corresponding cell $u$. In particular $M(u)\le r$ on the entire row.
+
+\begin{lemma}\label{lem:row}
+At a bad cell of a dense $r$-row, $M(u)=r$. Every row of smaller axis through that cell consists entirely of bad cells. If an $r$-point fiber has a line containing $m$ points with $2\le m<r$, there are at most $r-m$ injective projective directions on that fiber.
+\end{lemma}
+\begin{proof}
+A noncollinear $r$-point set in $\F_r^2$ determines at least $(r+3)/2$ of the $r+1$ projective directions \cite[Theorem~1]{directions}. An injective projection corresponds to an undetermined kernel direction. Thus every fiber on a dense row is collinear. A collision on a line containing the fiber collapses all $r$ points. A smaller row through the same cell cannot contain a good cell, by the occupancy bound just proved. For the last assertion, join one outside point to the $m$ points on the line. These $m$ directions and the direction of the line are all distinct.
+\end{proof}
+
+\begin{lemma}\label{lem:half}
+Suppose exactly $(r-1)/2$ unit coefficients in an $r$-row are good and every tested cell satisfies $M(u)<(r+1)/2$. For $r\ge5$, each bad cell in this row has $M(u)=2$. On each fiber exhibiting a collision, all points lie on the union of a horizontal and a vertical line. Each of these lines contains $(r+1)/2$ points, including their intersection.
+\end{lemma}
+\begin{proof}
+A colliding fiber cannot be collinear, since then $M(u)=r$ at its collision. Its number of injective projective directions is exactly $(r-1)/2$ by the direction bound. The supplement to Theorem~1 of Lov\'asz and Schrijver \cite{directions} identifies it, up to affine coordinates, with the graph of $x^{(r+1)/2}$. For $x\ne0$ this function is $x$ on squares and $-x$ on nonsquares. The two supporting lines therefore each contain $(r+1)/2$ points. Their directions cannot be kernels of any tested coefficient by the multiplicity cap. The only untested directions are horizontal and vertical. Any tested line meets their union in at most two points. This holds on each colliding fiber, as required.
+\end{proof}
+
+\section{Three prime factors}
+Assume there is a permutation with slope count strictly between the proposed bound and $\varphi(apq)$. Let $b$ be the number of bad unit cells and put
+\[
+ A=a-1,\quad B=A(p-1)-1,\quad L=(q-1)/2,\quad T=(p-1)/2.
+\]
+Then $1\le b\le B$. In both families $L\ge A$.
+
+\begin{lemma}\label{lem:three}
+Every $q$-row meeting the bad set is sparse. At most $R=\lfloor B/L\rfloor<2A$ such rows occur. At least one $p$-row meeting the bad set is sparse.
+\end{lemma}
+\begin{proof}
+A bad cell on a dense $q$-row would force its whole $p$-row to be bad. Every slice obtained by fixing the $p$-coordinate would then meet the bad set. If a slice had fewer than $A$ bad cells, each affected $q$-row in it would be dense, since fewer than $L$ cells would be bad. Lemma~\ref{lem:row} would force all $A$ cells on an $a$-row in that slice to be bad. Thus every slice costs at least $A$ cells, exceeding $B$ in total. This proves the first assertion. Each affected row uses at least $L$ cells, and $q>p$ gives $R<2A$.
+
+If every affected $p$-row were dense, every bad cell would force its whole $a$-row to be bad. Each affected $p$-coordinate would then account for $A$ affected $q$-rows. Since $R<2A$, only one $p$-coordinate occurs. On each of its $A$ rows the same set of at most $\lfloor B/A\rfloor=p-2$ positions is bad. Each row has at least $q-p+1$ good coefficients, yet at a bad cell a $q$-fiber contains a line with exactly $p$ points because $M(u)=p$. Lemma~\ref{lem:row} allows at most $q-p$ injective directions.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:family}]
+A sparse $p$-row meeting the bad set needs at least $T$ distinct affected $q$-rows. Hence $R<T$ is impossible. For $a=3$ and $p\ge11$ we have $R<4\le T$. For $p=7$ the least $q$ is $11$ and $R\le2<3$. For $p=5$ and $q\ge11$, $R\le1<2$. The sole remaining case is $105$, where we use the established upper bound \cite{aft105}.
+
+For $a=5$ and $p\ge17$ we have $R<8\le T$. For $p=7,11,13$ and $q\ge17$ we have respectively $R\le2,4,5$, each less than $T$. The other three pairs appear below. In each of these $R<2T$. A bad cell on a dense $p$-row would force all $A=4$ cells on its $a$-row to be bad. The corresponding four $q$-rows have the same $p$-coordinate, so any one $p$-row meets at most one of them. If $R<4$ they cannot exist, and otherwise every $p$-row would have at most $1+R-4<T$ bad cells, contradicting Lemma~\ref{lem:three}. Thus every affected $p$-row is sparse. Each affected $a$-coordinate costs at least $T$ affected $q$-rows, and $R<2T$ permits only one such coordinate.
+
+Each bad cell now lies on a $5$-row with a single bad cell and hence has $M(u)=5$. On an affected $r$-row ($r=p,q$) there are at least $(r-1)/2$ bad cells by sparsity, and at least four by Lemma~\ref{lem:row} applied to a five-point line. The second bound is immediate if the row has no good coefficient. If $5<(r+1)/2$, equality in the first bound is excluded by Lemma~\ref{lem:half}. Applying these bounds gives the following counts.
+\[
+\begin{array}{cccccc}
+\toprule p&q&B&R&\text{affected }q\text{-rows, at least}&\text{bad cells per such row, at least}\\
+\midrule
+7&11&23&4&4&6\\
+7&13&23&3&4&7\\
+11&13&39&6&6&7\\
+\bottomrule
+\end{array}
+\]
+The product of the last two entries in each row exceeds $B$. Together with \eqref{eq:witness}, this proves the theorem.
+\end{proof}
+
+\input{modulus-1365}
+\end{document}

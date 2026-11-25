@@ -1,0 +1,98 @@
+\section{The bad cells modulo 1365}
+The unit array now has side lengths $2,4,6,12$. Assume that $529\le |D_n(g)|\le575$, so that $1\le b\le47$. We first exclude a dense row of either large axis meeting the bad set.
+
+\begin{lemma}\label{lem:cut}
+Let $V$ be a Cartesian grid, with two points adjacent when they differ in just one coordinate. For any nonempty $D\subseteq V$ let $N[D]$ denote $D$ together with its neighbors. In both rows of the table,
+\[
+ i|D|+j|N[D]\setminus D|\ge 48.
+\]
+\[
+\begin{array}{cccc}
+\toprule \text{side lengths of } V & i & j & \text{certified flow value}\\
+\midrule (2,4,6)&1&6&288\\ (2,4)&6&18&144\\ \bottomrule
+\end{array}
+\]
+\end{lemma}
+\begin{proof}
+Relabel coordinates so that $0\in D$. Give each vertex $v$ two copies $v',v''$. Add arcs from a source to each $v'$ with capacity $j-i$, except at the origin where the capacity is $j|V|+1$. Give each arc $v''$ to the sink capacity $j$. Add an arc of capacity $j|V|+1$ from $v'$ to $w''$ for each $w\in N[\{v\}]$. Put the source, the first copies of $D$ and the second copies of $N[D]$ on one side of a cut. Its capacity is
+\[
+ (j-i)|V|+i|D|+j|N[D]\setminus D|.
+\]
+The integer flows in \texttt{certificates/cuts.json} have the displayed values. The checker reconstructs the capacities and checks conservation at each internal vertex. Subtracting $(j-i)|V|$ from each flow value gives $48$ in both cases.
+\end{proof}
+
+Fix the $13$-coordinate of a bad cell on a dense $13$-row, if one exists. In that section let $D$ consist of the bad cells on dense $13$-rows. All neighbors of $D$ are bad by Lemma~\ref{lem:row}. Each point of $D$ accounts for one bad cell and each neighbor outside $D$ for at least six, since its $13$-row is sparse. These costs are on distinct rows. The first cut yields $b\ge48$.
+
+Next fix the $7$- and $13$-coordinates of a bad cell on a dense $7$-row. In the remaining $(2,4)$ grid let $D$ consist of the bad cells on dense $7$-rows. Each point of $D$ costs at least six bad cells on its $13$-row, already known to be sparse. A neighbor outside $D$ is bad on a sparse $7$-row, which occupies at least three distinct $13$-rows, each costing six. Costs at distinct grid points have distinct pairs of lower coordinates. The second cut again yields $b\ge48$. Thus every affected row of axis $7$ or $13$ is sparse.
+
+Each active pair of coordinates at $3,5$ accounts for at least $3\cdot6=18$ bad cells, so at most two pairs are active. Fix any section obtained by specifying the two larger coordinates. A solitary bad cell is impossible: its $5$-row would force $M=5$ and its $3$-row would give $M\le3$. Two bad cells differing in both lower coordinates have the same problem. Consequently exactly two lower pairs occur, they share one coordinate, and every nonempty section contains both.
+
+If they share the $5$-coordinate, every bad cell has $M=5$ by the dense $5$-row. An affected $7$-row then needs at least four bad cells by the five-point line bound (or all six are bad). Hence $b\ge 2\cdot4\cdot6=48$. The pairs therefore share the $3$-coordinate, and $M\le3$ at every bad cell. For either lower pair there must be exactly three active $7$-coordinates: sparsity requires three, and a fourth would again cost at least $48$ cells altogether. Each affected $7$-row contains all three. The bad set is a rectangle
+\[
+ \{t\}\times A_5\times A_7\times K,\qquad |A_5|=2,\quad |A_7|=3,\quad 6\le |K|\le7.
+\]
+Here the lower bound on $|K|$ follows from sparsity at $13$, and the upper bound from $6|K|\le47$. On the $7$-rows Lemma~\ref{lem:half} applies with $M\le3<4$. In particular every bad cell now has $M=2$.
+
+\begin{lemma}\label{lem:sim}
+Over $\F_{13}$ let $S$ be a set of $13$ points containing $(0,0)$ and $(1,-1)$. Suppose each tested projection $y+ux$, $u\ne0$, has maximum multiplicity at most two, and at least five are injective. Its injective unit coefficients are exactly $\{2,5,6,7,8,11\}$.
+\end{lemma}
+\begin{proof}
+Here is the complete finite enumeration implemented in \texttt{fibers.py}. Choose five required injective coefficients from $\{2,\ldots,12\}$. The anchors preclude $1$. For the least chosen coefficient $s$, label the points by $z=y+sx$. Write them uniquely as $(h(z),z-sh(z))$. The anchors prescribe $h(0)=0$ and $h(s-1)=1$. Assign each other $h(z)$ one of the thirteen residues. For each $u$ keep counts of the values $z+(u-s)h(z)$, discarding an assignment as soon as a count exceeds one in a chosen direction or two in another unit direction. A discarded prefix has no admissible completion. At each full assignment read off all injective coefficients. Of the $\binom{11}{5}=462$ choices, six admit a completion, and every completion gives the displayed set. The checker regenerates the enumeration.
+\end{proof}
+
+Write $Q_r=\{x^2:x\in\U_r\}$. For each $b_0\in K$, choose a $13$-fiber witnessing a collision at $b_0$. Divide its $y$-coordinates by $b_0$, translate a collision pair to start at the origin, and scale both coordinates by the inverse of the difference of their $x$-coordinates. That difference is nonzero because the two points are distinct and collide. This gives the anchors in Lemma~\ref{lem:sim}, with the original coefficients divided by $b_0$. At least $12-|K|\ge5$ unit coefficients are injective on the fiber. Its bad directions are therefore exactly $b_0Q_{13}$. They lie in $K$. This holds for every $b_0\in K$, so $K$ is a union of square cosets. It must be one coset of size six. Only $576-36=540$ remains to be excluded.
+
+On the affected rows at $r=5,7,13$, exactly half the unit coefficients are good. By Lemma~\ref{lem:half} every colliding fiber consists of two coordinate arms. Translate their intersection to the origin and let $A,B\subset\U_r$ be the nonzero displacements on the horizontal and vertical arms. Both have size $(r-1)/2$. Each good $s$ satisfies $sA=\U_r\setminus B$. For a fixed good $s_0$, the $(r-1)/2$ quotients $s/s_0$ belong to the multiplicative stabilizer of $A$. This subgroup is proper and thus has size at most $(r-1)/2$. It equals $Q_r$, the unique subgroup of that order. Consequently $A,B$ and the sets of good and bad coefficients on the row are cosets of $Q_r$. The same conclusion for the singleton bad set at $3$ is immediate. Multiplication of $g$ by a unit scales all good slopes by that unit. Choose its components independently so that the bad rectangle becomes $\prod_{r\mid1365}Q_r$.
+
+\section{Four fibers through one collision}
+At the bad slope $1$ choose two inputs giving the same output of $g(x)+x$. Their difference $d$ is a unit: if the inputs agreed at a prime, the outputs of $g$ would agree there too, and varying only that slope coordinate to a nonsquare would preserve the collision at a good slope. If $x_0$ is the first input, the replacement
+\[
+ g(x)\longmapsto d^{-1}\bigl(g(x_0+dx)-g(x_0)\bigr)
+\]
+preserves all good slopes and multiplicities and gives $g(0)=0$, $g(1)=-1$.
+
+For each $r\mid1365$ take the fiber of inputs whose outputs under $g(x)+x$ vanish at the other primes. At $r=5,7,13$ its horizontal and vertical arms contain the two anchors on different arms. The intersection must be either $(0,-1)$ or $(1,0)$. The displacements on each arm are a square coset, determined by its anchor. At $r=3$ the three points cannot be collinear because the collision has multiplicity two. Their three secants use distinct directions. The unique good unit coefficient excludes one direction, and the anchors give the diagonal secant. The other two secants must be horizontal and vertical. Thus also at $3$ there are exactly the same two choices of intersection. Written modulo $r$, the two projected fibers are
+\begin{align*}
+ &\{(0,-1)\}\cup\{(t,-1),(0,-1+t):t\in Q_r\},\\
+ &\{(1,0)\}\cup\{(1-t,0),(1,-t):t\in Q_r\}.
+\end{align*}
+Two different fibers have only the anchors in common: their common inputs give zero output in every coordinate at slope $1$, where $M=2$. The four fibers therefore use $2+\sum_{r\mid1365}(r-2)=22$ distinct inputs.
+
+\begin{lemma}\label{lem:rup}
+None of the $16$ choices of projected fibers admits a placement of these $22$ points with distinct inputs and injective outputs at every good unit slope.
+\end{lemma}
+\begin{proof}
+We describe the Boolean formula rebuilt by \texttt{anchors.py}. Each anchor has one prescribed coordinate pair at each prime. For a remaining point of the $r$-fiber its $r$-pair is prescribed, and its pair at every other prime $p$ ranges over $(t,-t)$ for $t\in\F_p$. Introduce one variable per point, coordinate and allowed pair. One positive clause and pairwise negative clauses impose exactly one choice in each position.
+
+For two points with selected coordinates $(x_p,y_p)$ and $(z_p,w_p)$ put
+\[
+ C_p=\{s\in\U_p:y_p+sx_p=w_p+sz_p\}.
+\]
+Their collision set in the unit array is $\prod_p C_p$. Require that $x_p\ne z_p$ for at least one $p$. Also require, for each $p$, that
+\[
+ C_p\setminus Q_p\ne\varnothing\quad\Longrightarrow\quad
+ C_j=\varnothing\text{ for some }j.
+\]
+These implications say precisely that the two points cannot collide outside the bad rectangle. For each local predicate the checker evaluates every allowed pair of choices. If its truth value varies, a Boolean variable records it, with a clause forcing that value for each choice. Constant truth values are substituted directly.
+
+Each formula has $2260$ variables and $42275$ clauses. The archive gives one proof for each formula. For each added clause the checker assumes its literals false and propagates unit clauses to contradiction. Thus the added clause follows from its predecessors. Each trace ends with the empty clause. In lexicographic orientation order, the numbers of additions for the first eight are
+\[
+ 931,\ 345,\ 382,\ 516,\ 1240,\ 547,\ 435,\ 288.
+\]
+They repeat for the last eight, giving $9368$ checked additions. This rules out every placement.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:four}]
+Any count strictly between $528$ and $576$ would have forced one of the placements excluded by Lemma~\ref{lem:rup}. Equation~\eqref{eq:witness} gives $48\cdot11=528$ at $n=1365$, and the identity has $576$ good slopes.
+\end{proof}
+
+\paragraph{Verification.}
+The accompanying archive contains the two integer flows, the Boolean proof traces and the checker. Run \texttt{python -B verify.py} with Python 3.10 or later. It also tests every coefficient of the attaining permutations at $105,165,231,385,455,715$ and $1365$. The argument for the two infinite families is in Section~3. The versioned source is available at \href{https://github.com/olegtuta/good-slope-gaps/tree/v1.0}{\texttt{olegtuta/good-slope-gaps}, tag \texttt{v1.0}}.
+
+\begin{thebibliography}{9}
+\bibitem{first} D.~K. Bhunia, \emph{Extremal permutations of $\Z_n$ with many good slopes and applications to quantum Latin squares}, 2026. \href{https://arxiv.org/abs/2611.01465v1}{arXiv:2611.01465v1}.
+\bibitem{second} D.~K. Bhunia, \emph{Good slopes, congruence preservation, and gaps over residue rings}, 2026. \href{https://arxiv.org/html/2611.04551v1#S10}{arXiv:2611.04551v1, Section 10}.
+\bibitem{directions} L.~Lov\'asz and A.~Schrijver, \href{https://ir.cwi.nl/pub/10047}{Remarks on a theorem of R\'edei}, \emph{Studia Sci. Math. Hungar.} \textbf{16} (1981), pp.~449 to 454. Theorem~1 and its supplement.
+\bibitem{aft105} AFTD, \href{https://rainwangphy.github.io/aftd-platform/d/good_slopes_gap_mod_105/}{\texttt{good\_slopes\_gap\_mod\_105}}, formal theorem and Lean source, November 2026.
+\bibitem{aft165} AFTD, \href{https://rainwangphy.github.io/aftd-platform/blog/2026-11-19-op-1027/}{A good-slope gap modulo 165 and a conditional bound for three-prime moduli}, OP-1027, 19 November 2026.
+\end{thebibliography}
