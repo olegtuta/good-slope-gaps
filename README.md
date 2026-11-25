@@ -1,6 +1,8 @@
 # Good-slope gaps over squarefree residue rings
 
-Verification files for Oleg Kyzlasov, *Sharp good-slope gaps for permutations of squarefree residue rings*, version 1.0 (25 November 2026). [Read the preprint](manuscript/good-slope-gaps.pdf).
+This repository contains the code and certificates needed to independently verify the finite computations in *Sharp good-slope gaps for permutations of squarefree residue rings* by Oleg Kyzlasov, version 1.0 (25 November 2026).
+
+[Preprint on Zenodo (DOI 10.5281/zenodo.24532320)](https://doi.org/10.5281/zenodo.24532320) · [PDF in this repository](manuscript/good-slope-gaps.pdf)
 
 For a permutation `f` modulo `n`, count the coefficients `u` for which `f(x) + ux` is also a permutation. The largest possible count is Euler's totient of `n`. The paper determines the next largest count in the following cases.
 
